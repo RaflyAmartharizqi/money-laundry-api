@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AccountStatusModel extends Model
+class CustomerModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'account_status';
-    protected $primaryKey = 'account_status_id';
+    protected $table = 'customer';
+    protected $primaryKey = 'customer_id';
     protected $fillable = [
+        'users_id',
         'name',
+        'phone_number',
     ];
-
 }

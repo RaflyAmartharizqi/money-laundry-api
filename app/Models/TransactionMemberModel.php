@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AccountStatusModel extends Model
+class TransactionMemberModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'account_status';
-    protected $primaryKey = 'account_status_id';
+    protected $table = 'transaction_member';
+    protected $primaryKey = 'transaction_member_id';
     protected $fillable = [
-        'name',
+        'users_id',
+        'admin_id',
+        'subscription_range',
+        'total_price',
     ];
-
 }
