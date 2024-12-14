@@ -44,7 +44,7 @@ class TransactionMemberController extends Controller
             } else {
                 $user->active_until = Carbon::parse($user->active_until)->addDays($days);
             }
-            $user->account_status_id = 2;
+            $user->account_status_id = $request->account_status_id;
             $user->save();
 
             return ApiResponse::success(Messages::SUCCESS_TRANSACTION_MEMBER, 200, $transactionMember);
