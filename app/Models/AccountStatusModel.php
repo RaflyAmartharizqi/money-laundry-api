@@ -14,6 +14,8 @@ class AccountStatusModel extends Model
     protected $primaryKey = 'account_status_id';
     protected $fillable = [
         'name',
+        'price',
+        'range',
     ];
 
 }

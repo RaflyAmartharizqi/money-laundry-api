@@ -288,41 +288,36 @@ class TransactionOrderController extends Controller
         }
     }
 
-    public function filterTransactionOrder(Request $request)
+    public function filterTransactionOrder(Request $request, $userId)
     {
         try 
         {
             $validator = Validator::make($request->all(), [
-                'status' => 'required|in:new,on process,done', // Validasi hanya menerima nilai sesuai ENUM
+                'status' => 'nullable|in:new,on process,done',
+                'payment_status' => 'nullable|in:paid,unpaid',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
-                'user_id' => 'required|integer|exists:users,users_id',
             ]);
 
             if ($validator->fails()) {
                 return ApiResponse::error(Messages::ERROR_VALIDATION, 400, $validator->errors());
             }
 
-            if ($request->start_date == null && $request->end_date == null) {
-                $transactionOrder = TransactionOrderModel::where('status', $request->status)
-                    ->where('users_id', $request->user_id)
-                    ->with(['package_laundry', 'customer', 'add_on_item'])
-                    ->orderBy('order_date', 'desc')
-                    ->get();
-            } elseif ($request->status == null) {
-                $transactionOrder = TransactionOrderModel::whereBetween('order_date', [$request->start_date, $request->end_date])
-                    ->where('users_id', $request->user_id)
-                    ->with(['package_laundry', 'customer', 'add_on_item'])
-                    ->orderBy('order_date', 'desc')
-                    ->get();
-            } else {
-                $transactionOrder = TransactionOrderModel::whereBetween('order_date', [$request->start_date, $request->end_date])
-                    ->where('status', $request->status)
-                    ->where('users_id', $request->user_id)
-                    ->with(['package_laundry', 'customer', 'add_on_item'])
-                    ->orderBy('order_date', 'desc')
-                    ->get();
+            $transactionOrder = TransactionOrderModel::where('users_id', $userId);
+
+            if ($request->start_date != null && $request->end_date != null) {
+                $transactionOrder->whereBetween('order_date', [$request->start_date, $request->end_date]);
+            } 
+            
+            if ($request->status != null) {
+                $transactionOrder->where('status', $request->status);
+            } 
+            
+            if ($request->payment_status != null) {
+                $transactionOrder->where('payment_status', $request->payment_status);
             }
+
+            $transactionOrder = $transactionOrder->with(['package_laundry', 'customer', 'add_on_item'])->orderBy('order_date', 'desc')->get();
 
             $transactionOrderCount = $transactionOrder->count();
 

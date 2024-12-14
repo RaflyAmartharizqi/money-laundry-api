@@ -16,11 +16,21 @@ class AccountStatusSeeder extends Seeder
     public function run(): void
     {
         DB::table('account_status')->insert([
-            'name' => 'free',
+            'name' => 'basic',
+            'price' => 0,
+            'range' => 0,
         ]);
 
         DB::table('account_status')->insert([
-            'name' => 'paid',
+            'name' => 'silver',
+            'price' => 50000,
+            'range' => 30,
+        ]);
+
+        DB::table('account_status')->insert([
+            'name' => 'gold',
+            'price' => 130000,
+            'range' => 90,
         ]);
     }
 }

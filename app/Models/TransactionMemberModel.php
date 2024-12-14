@@ -15,6 +15,7 @@ class TransactionMemberModel extends Model
     protected $fillable = [
         'users_id',
         'admin_id',
+        'account_status_id',
         'subscription_range',
         'total_price',
     ];

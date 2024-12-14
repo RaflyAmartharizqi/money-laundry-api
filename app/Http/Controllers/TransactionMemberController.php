@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Helpers\ApiResponse;
 use App\Constants\Messages;
 use App\Models\TransactionMemberModel;
+use App\Models\AccountStatusModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,8 +20,7 @@ class TransactionMemberController extends Controller
         {
             $validator = Validator::make($request->all(), [
                 'users_id' => 'required|integer|exists:users,users_id',
-                'subscription_range' => 'required|integer',
-                'total_price' => 'required|integer',
+                'account_status_id' => 'required|integer|exists:account_status,account_status_id',
             ]);
 
             if ($validator->fails()) {
@@ -28,15 +28,16 @@ class TransactionMemberController extends Controller
             }
 
             $admin = Auth::guard('admin-api')->user();
-
+            $accountStatus = AccountStatusModel::find($request->account_status_id);
             $transactionMember = TransactionMemberModel::create([
                 'users_id' => $request->users_id,
                 'admin_id' => $admin->admin_id,
-                'subscription_range' => $request->subscription_range,
-                'total_price' => $request->total_price,
+                'account_status_id' => $request->account_status_id,
+                'subscription_range' => $accountStatus->range,
+                'total_price' => $accountStatus->price,
             ]);
 
-            $days = $request->subscription_range * 30;
+            $days = $accountStatus->range;
             $user = User::find($request->users_id);
             if ($user->active_until == null) {
                 $user->active_until = Carbon::now()->addDays($days);

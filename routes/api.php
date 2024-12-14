@@ -55,7 +55,7 @@ Route::middleware('auth:api')->prefix('/user')->group(function () {
 
     Route::get('/keuangan/{userId}', [FinanceReportController::class, 'index']);
 
-    Route::post('/filter-transaction-order', [TransactionOrderController::class, 'filterTransactionOrder']);
+    Route::post('/filter-transaction-order/{userId}', [TransactionOrderController::class, 'filterTransactionOrder']);
     Route::put('/update-status-order/{transactionOrderId}', [TransactionOrderController::class, 'updateStatusOrder']);
 
 });
