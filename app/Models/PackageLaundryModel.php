@@ -19,4 +19,9 @@ class PackageLaundryModel extends Model
         'price_per_kg',
         'description',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'users_id', 'users_id');
+    }
 }

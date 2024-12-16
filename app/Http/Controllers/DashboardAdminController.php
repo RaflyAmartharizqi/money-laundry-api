@@ -48,10 +48,12 @@ class DashboardAdminController extends Controller
             
 
             $user = User::count();
-            $userFree = User::where('account_status_id', 1)->count();
-            $userPaid = User::where('account_status_id', 2)->count();
-            $userFreePercentage = $user > 0 ? round(($userFree / $user) * 100) : 0;
-            $userPaidPercentage = $user > 0 ? round(($userPaid / $user) * 100) : 0; 
+            $userBasic = User::where('account_status_id', 1)->count();
+            $userSilver = User::where('account_status_id', 2)->count();
+            $userGold = User::where('account_status_id', 3)->count();
+            $userBasicPercentage = $user > 0 ? round(($userBasic / $user) * 100) : 0;
+            $userSilverPercentage = $user > 0 ? round(($userSilver / $user) * 100) : 0; 
+            $userGoldPercentage = $user > 0 ? round(($userGold / $user) * 100) : 0; 
 
             $data = [
                 'total_transaction' => [
@@ -61,8 +63,9 @@ class DashboardAdminController extends Controller
                 'transaction_member' => $transactionMember,
                 'transaction_member_incomes' => $transactionMemberIncomes,
                 'user' => [
-                    'user_free_percentage' => $userFreePercentage,
-                    'user_paid_percentage' => $userPaidPercentage,
+                    'user_basic_percentage' => $userBasicPercentage,
+                    'user_silver_percentage' => $userSilverPercentage,
+                    'user_gold_percentage' => $userGoldPercentage,
                 ],
                 'weekly_transaction' => $dates,
             ];

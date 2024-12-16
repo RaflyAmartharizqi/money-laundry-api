@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PackageLaundryModel;
+use App\Models\User;
 use App\Helpers\ApiResponse;
 use App\Constants\Messages;
 use App\Models\TransactionMemberModel;
@@ -17,6 +18,25 @@ class PackageLaundryController extends Controller
         try 
         {
             $packageLaundry = PackageLaundryModel::where('users_id', $usersId)->get();
+            return ApiResponse::success(Messages::SUCCESS_GET_DATA, 200, $packageLaundry);
+        } catch (\Exception $e) {
+            return ApiResponse::error(Messages::ERROR_GET_DATA, 404, $e->getMessage());
+        }
+    }
+
+    public function packageList($usersId)
+    {
+        try 
+        {
+            $user = User::with('account_status')->find($usersId);
+            if ($user->account_status_id == 1) {
+                $packageLaundry = PackageLaundryModel::where('users_id', $usersId)
+                ->take(3)
+                ->get();
+            } else {
+                $packageLaundry = PackageLaundryModel::where('users_id', $usersId)
+                ->get();
+            }
             return ApiResponse::success(Messages::SUCCESS_GET_DATA, 200, $packageLaundry);
         } catch (\Exception $e) {
             return ApiResponse::error(Messages::ERROR_GET_DATA, 404, $e->getMessage());
@@ -100,6 +120,22 @@ class PackageLaundryController extends Controller
             return ApiResponse::success(Messages::SUCCESS_DELETE_DATA, 200, $packageLaundry);
         } catch (\Exception $e) {
             return ApiResponse::error(Messages::ERROR_DELETE_DATA, 404, $e->getMessage());
+        }
+    }
+
+    public function checkUserAccountStatusforAddPackage($usersId)
+    {
+        try 
+        {
+            $packageLaundry = PackageLaundryModel::where('users_id', $usersId)->get()->count();
+            $user = User::with('account_status')->find($usersId);
+            if ($user->account_status_id == 1 && $packageLaundry >= 3) {
+                return ApiResponse::error(Messages::ERROR_MAX_PACKAGE, 400);
+            } else {
+                return ApiResponse::success(Messages::SUCCESS_MAX_PACKAGE, 200, null);
+            }
+        } catch (\Exception $e) {
+            return ApiResponse::error(Messages::ERROR_GET_DATA, 404, $e->getMessage());
         }
     }
 }

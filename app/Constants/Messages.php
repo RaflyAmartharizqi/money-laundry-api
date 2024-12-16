@@ -27,6 +27,8 @@
         const SUCCESS_UPDATE_PAYMENT = 'Update Payment successful';
         const SUCCESS_UPDATE_STATUS_ORDER = 'Update Status Order successful';
 
+        const SUCCESS_MAX_PACKAGE = 'You can add more package';
+
         const ERROR_NOT_FOUND = 'Data not found';
 
         const ERROR_INVALID_OTP = 'Invalid OTP';
@@ -46,5 +48,6 @@
         const ERROR_SEND_WA = 'Error send WA';
         const ERROR_UPDATE_PAYMENT = 'Error update payment';
         const ERROR_UPDATE_STATUS_ORDER = 'Error update status order';
+        const ERROR_MAX_PACKAGE = 'Maximum package reached';
     }
 ?>

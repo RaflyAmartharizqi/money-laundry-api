@@ -39,10 +39,12 @@ Route::post('/user/forgot-password/resend-otp', [AuthController::class, 'resendF
 
 Route::middleware('auth:api')->prefix('/user')->group(function () {
 
-    Route::get('/package-laundry/{usersId}', [PackageLaundryController::class, 'index']);
+    Route::get('/package-laundry/{usersId}', [PackageLaundryController::class, 'packageList']);
     Route::post('/package-laundry', [PackageLaundryController::class, 'store']);
     Route::put('/package-laundry/{packageLaundryId}', [PackageLaundryController::class, 'update']);
     Route::delete('/package-laundry/{packageLaundryId}', [PackageLaundryController::class, 'destroy']);
+
+    Route::get('/check-package-laundry/{usersId}', [PackageLaundryController::class, 'checkUserAccountStatusforAddPackage']);
 
     Route::get('/transaction-order/{usersId}', [TransactionOrderController::class, 'index']);
     Route::get('/transaction-order-detail/{transactionOrderId}', [TransactionOrderController::class, 'transactionOrderDetail']);
